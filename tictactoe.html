@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Tic Tac Toe</title>
+    <style media="screen">
+      table, tr, td {
+        border: 1px solid black;
+      }
+      table {
+        border-collapse: collapse;
+      }
+      tr {
+        height: 50px;
+      }
+      td {
+        width: 50px;
+        text-align: center;
+      }
+      .winners {
+        background-color: green;
+      }
+    </style>
+  </head>
+  <body>
+    <button onclick="resetGame()">New Game</button>
+    <p>Current Player: <span id="currentPlayer">x</span></p>
+    <table id="game">
+    </table>
+    <script>
+
+      // Setup our tic-tac-toe board
+      const table = document.getElementById('game');
+      for (let i = 0; i < 3; i++) {
+        const row = document.createElement('tr');
+        game.appendChild(row);
+        for (let j = 0; j < 3; j++) {
+          const square = document.createElement('td');
+          square.addEventListener('click', handleSquareClickEvent);
+          row.appendChild(square);
+        }
+      }
+
+      /**
+       * Handles what happens when the user clicks on an individual square
+       * @param  {HTML event} event An event containing information about the click.
+       * @return {undefined}
+       */
+      function handleSquareClickEvent (event) {
+        const currentPlayerElement = document.getElementById('currentPlayer')
+        const currentPlayer = currentPlayerElement.innerHTML;
+        event.target.innerHTML = currentPlayer;
+        if (currentPlayer === 'x') {
+          currentPlayerElement.innerHTML = 'o';
+        } else {
+          currentPlayerElement.innerHTML = 'x';
+        }
+        checkForWinner();
+      }
+
+      /**
+       * Resets the game back to the original state.
+       * @return {undefined}
+       */
+      function resetGame() {
+        const cells = document.getElementsByTagName('td');
+        for (let i = 0; i < cells.length; i++) {
+          cells[i].innerHTML = '';
+          cells[i].className = '';
+        }
+        document.getElementById('currentPlayer').innerHTML = 'x';
+      }
+
+      /**
+       * Calls functions to check for winners vertically, horizontally or diagonally.
+       * @return {undefined}
+       */
+      function checkForWinner() {
+        checkForVerticalWinner();
+        checkForHorizontalWinner();
+        checkForDiagonalWinner();
+      }
+
+      /**
+       * Checks for winners along the 3 vertical columns
+       * @return {undefined}
+       */
+      function checkForVerticalWinner () {
+        const cells = document.getElementsByTagName('td');
+        for (let i = 0; i < 3; i++) {
+          if (cells[i].innerHTML !== ''
+              && cells[i].innerHTML === cells[i + 3].innerHTML
+              && cells[i].innerHTML === cells[i + 6].innerHTML) {
+            cells[i].className = 'winners';
+            cells[i + 3].className = 'winners';
+            cells[i + 6].className = 'winners';
+          }
+        }
+      }
+
+      /**
+       * Checks for winners alon the 3 horizontal rows.
+       * @return {undefined}
+       */
+      function checkForHorizontalWinner () {
+        const cells = document.getElementsByTagName('td');
+        for (let i = 0; i < 7; i += 3) {
+          if (cells[i].innerHTML !== ''
+              && cells[i].innerHTML === cells[i + 1].innerHTML
+              && cells[i].innerHTML === cells[i + 2].innerHTML) {
+            cells[i].className = 'winners';
+            cells[i + 1].className = 'winners';
+            cells[i + 2].className = 'winners';
+          }
+        }
+      }
+
+      /**
+       * Checks for winners along the two diagonals
+       * @return {undefined}
+       */
+      function checkForDiagonalWinner () {
+        const cells = document.getElementsByTagName('td');
+        // left to right down
+        if (cells[0].innerHTML !== ''
+            && cells[0].innerHTML === cells[4].innerHTML
+            && cells[0].innerHTML === cells[8].innerHTML) {
+          cells[0].className = 'winners';
+          cells[4].className = 'winners';
+          cells[8].className = 'winners';
+        }
+
+        // left to right up
+        if (cells[6].innerHTML !== ''
+            && cells[6].innerHTML === cells[4].innerHTML
+            && cells[6].innerHTML === cells[2].innerHTML) {
+          cells[6].className = 'winners';
+          cells[4].className = 'winners';
+          cells[2].className = 'winners';
+        }
+      }
+    </script>
+  </body>
+</html>
